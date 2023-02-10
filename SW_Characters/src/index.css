@@ -7,8 +7,8 @@
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
-  height: '100%';
-  width: '100%';
+  height: "100%";
+  width: "100%";
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -30,6 +30,9 @@ body {
   height: 100vh;
 }
 
+.force-graph-controller {
+  border: "1 yellow";
+}
 
 @media (prefers-color-scheme: light) {
   :root {
