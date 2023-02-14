@@ -9,92 +9,60 @@ import ForceGraph2D, {
 import { Box, Card, CardContent, CardHeader } from "@mui/material";
 import React from "react";
 
-function Graph() {
+export type GraphProps = {
+    data: {
+        nodes: {
+            id: number;
+            name: string;
+            val: number;
+            color: string;
+        }[];
+        links: {
+            source: number;
+            target: number;
+            val: number;
+        }[];
+    }
+    selectedNode: any;
+    setSelectedNode: (node: any) => void;
+    highlightedNode: any;
+    setHighlightedNode: (node: any) => void;
+    highlightedLink: any;
+    setHighlightedLink: (node: any) => void;
+}
+
+export default function Graph(props: GraphProps) {
   const graphRef = useRef<ForceGraphMethods | undefined>();
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
 
-  const [highlightedNode, setHighlightedNode] = useState<NodeObject | null>(
-    null
-  );
-  const [higlightedLink, setHighlightedLink] = useState<LinkObject | null>(
-    null
-  );
   const yellow = "rgba(255,255,0,0.4)";
   const red = "rgba(255,0,0,1)";
 
   useEffect(() => {
     setWidth((window.innerWidth / 12) * 4.65);
-    setHeight(window.innerHeight * 0.7);
+    setHeight(window.innerHeight*0.81);
   }, []);
 
-  const graphData = useMemo(() => {
-    const nodes = dataAll.nodes.map((item, index) => {
-      return {
-        id: index,
-        name: item.name,
-        val: item.value,
-        color: item.colour,
-      };
-    });
-
-    const links = dataAll.links.map((item, index) => {
-      return {
-        source: item.source,
-        target: item.target,
-        val: item.value,
-      };
-    });
-
-    return {
-      nodes: nodes,
-      links: links,
-    };
-  }, [dataAll]);
+ 
 
   function onEngineStop() {
     graphRef.current?.zoomToFit(400);
   }
 
-  const handleNodeHover = (node: NodeObject | null) => {
-    setHighlightedNode(node || null);
-  };
-
-  const handleLinkHover = (link: LinkObject | null) => {
-    setHighlightedLink(link || null);
-  };
-
-  const drawCircle = useCallback(
-    (node: NodeObject, ctx: CanvasRenderingContext2D) => {
-      // add ring just for highlighted nodes
-      ctx.beginPath();
-      ctx.arc(
-        node.x as number,
-        node.y as number,
-        2 * 1.4,
-        0,
-        2 * Math.PI,
-        false
-      );
-      ctx.fillStyle = node === highlightedNode ? "red" : "orange";
-      ctx.fill();
-      console.log(node);
-      console.log("was here at drawCircle");
-    },
-    [highlightedNode]
-  );
-
   return (
-    <Card sx={{ backgroundColor: "rgba(20,20,20,1)" }}>
+    <Card sx={{ backgroundColor: "rgba(20,20,20,1)"}}>
       <CardHeader
-        title="Graph 1"
+        title="Context"
         titleTypographyProps={{ color: "yellow", fontSize: "3rem" }}
+        sx={{paddingBottom: 0}}
       />
       <CardContent>
         <ForceGraph2D
           ref={graphRef}
           autoPauseRedraw={false}
-          graphData={graphData}
+          minZoom={1.5}
+          graphData={props.data}
           nodeRelSize={1.5}
           height={height}
           width={width}
@@ -105,27 +73,27 @@ function Graph() {
           linkColor={(link) => {
             graphRef.current?.d3Force("link")?.distance(200);
             if (
-              link.target == highlightedNode ||
-              link.source == highlightedNode ||
-              link == higlightedLink
+              link.target == props.highlightedNode ||
+              link.source == props.highlightedNode ||
+              link == props.highlightedLink
             ) {
               return red;
             }
 
             return yellow;
           }}
-          linkWidth={(link) => {
+          linkWidth={(link: any) => {
             if (
-              link.target == highlightedNode ||
-              link.source == highlightedNode ||
-              link == higlightedLink
+              link.target == props.highlightedNode ||
+              link.source == props.highlightedNode ||
+              link == props.highlightedLink
             ) {
               return 1 + link.val / 10;
             }
             return 1;
           }}
-          linkLabel={(link) => {
-            if (link == higlightedLink) {
+          linkLabel={(link: any) => {
+            if (link == props.highlightedLink) {
               return (
                 link.source.name +
                 " -> " +
@@ -137,26 +105,34 @@ function Graph() {
             }
             return link.name;
           }}
-          nodeLabel={(node) => {
+          nodeLabel={(node: any) => {
+            if (node == null) {
+                console.log("null")
+                return '';
+            }
             return node.name + ": " + node.val + " interactions";
           }}
-          nodeColor={(node) => {
+          nodeColor={(node: any) => {
+            if (node == props.selectedNode) {
+                return 'white'
+            }
             if (
-              node == highlightedNode ||
-              node == higlightedLink?.source ||
-              node == higlightedLink?.target
+              node == props.highlightedNode ||
+              node == props.highlightedLink?.source ||
+              node == props.highlightedLink?.target
             ) {
               return red;
             }
+
             return node.color;
           }}
-          onEngineStop={() => graphRef.current?.zoomToFit(400)}
-          onNodeHover={handleNodeHover}
-          onLinkHover={handleLinkHover}
+          onEngineStop={onEngineStop}
+          onNodeHover={props.setHighlightedNode}
+          onNodeClick={(node) => node == props.selectedNode ? props.setSelectedNode(null) : props.setSelectedNode(node)}
+          onLinkHover={props.setHighlightedLink}
         />
       </CardContent>
     </Card>
   );
 }
 
-export default Graph;
