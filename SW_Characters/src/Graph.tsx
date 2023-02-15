@@ -10,26 +10,26 @@ import { Box, Card, CardContent, CardHeader } from "@mui/material";
 import React from "react";
 
 export type GraphProps = {
-    data: {
-        nodes: {
-            id: number;
-            name: string;
-            val: number;
-            color: string;
-        }[];
-        links: {
-            source: number;
-            target: number;
-            val: number;
-        }[];
-    }
-    selectedNode: any;
-    setSelectedNode: (node: any) => void;
-    highlightedNode: any;
-    setHighlightedNode: (node: any) => void;
-    highlightedLink: any;
-    setHighlightedLink: (node: any) => void;
-}
+  data: {
+    nodes: {
+      id: number;
+      name: string;
+      val: number;
+      color: string;
+    }[];
+    links: {
+      source: number;
+      target: number;
+      val: number;
+    }[];
+  };
+  selectedNode: any;
+  setSelectedNode: (node: any) => void;
+  highlightedNode: any;
+  setHighlightedNode: (node: any) => void;
+  highlightedLink: any;
+  setHighlightedLink: (node: any) => void;
+};
 
 export default function Graph(props: GraphProps) {
   const graphRef = useRef<ForceGraphMethods | undefined>();
@@ -38,30 +38,29 @@ export default function Graph(props: GraphProps) {
 
   const yellow = "rgba(255,255,0,0.4)";
   const red = "rgba(255,0,0,1)";
+  const blue = "rgba(77, 255, 243,1)";
 
   useEffect(() => {
     setWidth((window.innerWidth / 12) * 4.65);
-    setHeight(window.innerHeight*0.81);
+    setHeight(window.innerHeight * 0.81);
   }, []);
-
- 
 
   function onEngineStop() {
     graphRef.current?.zoomToFit(400);
   }
 
   return (
-    <Card sx={{ backgroundColor: "rgba(20,20,20,1)"}}>
+    <Card sx={{ backgroundColor: "rgba(20,20,20,1)", height: "100%" }}>
       <CardHeader
         title="Context"
         titleTypographyProps={{ color: "yellow", fontSize: "3rem" }}
-        sx={{paddingBottom: 0}}
+        sx={{ paddingBottom: 0 }}
       />
       <CardContent>
         <ForceGraph2D
           ref={graphRef}
           autoPauseRedraw={false}
-          minZoom={1.5}
+          minZoom={1.6}
           graphData={props.data}
           nodeRelSize={1.5}
           height={height}
@@ -70,8 +69,15 @@ export default function Graph(props: GraphProps) {
           enableNodeDrag={false}
           enablePanInteraction={false}
           enableZoomInteraction={false}
-          linkColor={(link) => {
+          linkColor={(link: any) => {
             graphRef.current?.d3Force("link")?.distance(200);
+            if (
+              link.target == props.selectedNode ||
+              link.source == props.selectedNode
+            ) {
+              return blue;
+            }
+
             if (
               link.target == props.highlightedNode ||
               link.source == props.highlightedNode ||
@@ -107,14 +113,14 @@ export default function Graph(props: GraphProps) {
           }}
           nodeLabel={(node: any) => {
             if (node == null) {
-                console.log("null")
-                return '';
+              console.log("null");
+              return "";
             }
-            return node.name + ": " + node.val + " interactions";
+            return node.name + ": " + node.val + " appearances";
           }}
           nodeColor={(node: any) => {
             if (node == props.selectedNode) {
-                return 'white'
+              return blue;
             }
             if (
               node == props.highlightedNode ||
@@ -128,11 +134,14 @@ export default function Graph(props: GraphProps) {
           }}
           onEngineStop={onEngineStop}
           onNodeHover={props.setHighlightedNode}
-          onNodeClick={(node) => node == props.selectedNode ? props.setSelectedNode(null) : props.setSelectedNode(node)}
+          onNodeClick={(node) =>
+            node == props.selectedNode
+              ? props.setSelectedNode(null)
+              : props.setSelectedNode(node)
+          }
           onLinkHover={props.setHighlightedLink}
         />
       </CardContent>
     </Card>
   );
 }
-
