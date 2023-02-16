@@ -81,6 +81,8 @@ function App() {
     <Grid
       container
       spacing={2}
+      paddingLeft={2}
+      paddingTop={2}
       sx={{ width: "100%", height: "100%", backgroundColor: "#999993" }}
     >
       <Grid item xs={5} sx={{ height: "100%" }}>

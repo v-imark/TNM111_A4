@@ -54,7 +54,7 @@ export default function FocusGraph(props: FocusGraphProps) {
         titleTypographyProps={{ color: "yellow", fontSize: "3rem" }}
         sx={{ paddingBottom: 0 }}
       />
-      <CardContent>
+      <CardContent  sx={{ paddingTop: 0 }}>
         <ForceGraph2D
           ref={graphRef}
           autoPauseRedraw={false}

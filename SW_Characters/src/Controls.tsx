@@ -88,8 +88,9 @@ export default function Controls(props: ControlsProps) {
       <CardHeader
         title="Options"
         titleTypographyProps={{ color: "yellow", fontSize: "3rem" }}
+        sx={{paddingBottom: 0}}
       />
-      <CardContent>
+      <CardContent sx={{paddingTop: 0}}>
         <ThemeProvider theme={theme}>
           <Box width={"100%"}>
             <Typography color="yellow">Episode</Typography>
@@ -99,86 +100,22 @@ export default function Controls(props: ControlsProps) {
               variant="fullWidth"
               sx={{ width: "100%" }}
             >
-              <Tab
-                label="E1"
-                sx={{
-                  color: "white",
-                  "&.Mui-checked": {
-                    color: theme.palette.primary.main,
-                  },
-                  minWidth: "12.5%",
-                }}
-              />
-              <Tab
-                label="E2"
-                sx={{
-                  color: "white",
-                  "&.Mui-checked": {
-                    color: theme.palette.primary.main,
-                  },
-                  minWidth: "12.5%",
-                }}
-              />
-              <Tab
-                label="E3"
-                sx={{
-                  color: "white",
-                  "&.Mui-checked": {
-                    color: theme.palette.primary.main,
-                  },
-                  minWidth: "12.5%",
-                }}
-              />
-              <Tab
-                label="E4"
-                sx={{
-                  color: "white",
-                  "&.Mui-checked": {
-                    color: theme.palette.primary.main,
-                  },
-                  minWidth: "12.5%",
-                }}
-              />
-              <Tab
-                label="E5"
-                sx={{
-                  color: "white",
-                  "&.Mui-checked": {
-                    color: theme.palette.primary.main,
-                  },
-                  minWidth: "12.5%",
-                }}
-              />
-              <Tab
-                label="E6"
-                sx={{
-                  color: "white",
-                  "&.Mui-checked": {
-                    color: theme.palette.primary.main,
-                  },
-                  minWidth: "12.5%",
-                }}
-              />
-              <Tab
-                label="E7"
-                sx={{
-                  color: "white",
-                  "&.Mui-checked": {
-                    color: theme.palette.primary.main,
-                  },
-                  minWidth: "12.5%",
-                }}
-              />
-              <Tab
-                label="ALL"
-                sx={{
-                  color: "white",
-                  "&.Mui-checked": {
-                    color: theme.palette.primary.main,
-                  },
-                  minWidth: "12.5%",
-                }}
-              />
+                {['E1', 'E2', 'E3', 'E4', 'E6', 'E7', 'ALL'].map((value, index) => {
+                    return (
+                        <Tab
+                            label={value}
+                            sx={{
+                                color: "white",
+                                "&.Mui-checked": {
+                                    color: theme.palette.primary.main,
+                                },
+                                minWidth: "12%",
+                                padding: 0
+                            }}
+                        />
+                    )
+                }
+                )}
             </Tabs>
           </Box>
           <Box>
@@ -288,22 +225,22 @@ export default function Controls(props: ControlsProps) {
             />
           </Box>
           {props.selectedNode ? (
-            <Box marginTop={3}>
-              <Typography variant="h3" sx={{ color: "yellow" }}>
+            <Box marginTop={0}>
+              <Typography variant="h5" sx={{ color: "yellow" }}>
                 Detailed info
               </Typography>
-              <Typography variant="h5" sx={{ color: "yellow" }}>
+              <Typography sx={{ color: "yellow" }}>
                 {"Character: " + props.selectedNode.name}
               </Typography>
-              <Typography variant="h5" sx={{ color: "yellow" }}>
+              <Typography sx={{ color: "yellow" }}>
                 {"Appearances: " + props.selectedNode.val}
               </Typography>
-              <Typography variant="h5" sx={{ color: "yellow" }}>
+              <Typography sx={{ color: "yellow" }}>
                 {"Interactions: "}
               </Typography>
               <List
                 dense={true}
-                style={{ maxHeight: window.innerHeight / 4, overflow: "auto" }}
+                style={{ maxHeight: window.innerHeight / 7, overflow: "auto" }}
               >
                 {props.data.links.map((link: any, index) => {
                   if (
@@ -316,7 +253,7 @@ export default function Controls(props: ControlsProps) {
                         : link.target.name;
 
                     return (
-                      <ListItem key={index}>
+                      <ListItem key={index} sx={{paddingY: 0}}>
                         <ListItemText
                           primary={label + ": " + link.val}
                           primaryTypographyProps={{
