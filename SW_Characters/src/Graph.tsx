@@ -60,7 +60,7 @@ export default function Graph(props: GraphProps) {
         <ForceGraph2D
           ref={graphRef}
           autoPauseRedraw={false}
-          minZoom={1.6}
+          minZoom={1.5}
           graphData={props.data}
           nodeRelSize={1.5}
           height={height}
