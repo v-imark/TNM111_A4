@@ -100,7 +100,7 @@ export default function Controls(props: ControlsProps) {
               variant="fullWidth"
               sx={{ width: "100%" }}
             >
-                {['E1', 'E2', 'E3', 'E4','E5', 'E6', 'E7', 'ALL'].map((value, index) => {
+                {['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'ALL'].map((value, index) => {
                     return (
                         <Tab
                             label={value}
